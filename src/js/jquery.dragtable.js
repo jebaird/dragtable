@@ -457,6 +457,8 @@
 		},
 				
 		destroy: function() {
+			var self = this,
+			o = self.options;
 			this.element.undelegate( 'thead th:not( :has(' + o.handle + ')), ' + o.handle, 'mousedown.' + self.widgetEventPrefix );
             
 		}
