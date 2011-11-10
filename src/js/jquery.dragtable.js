@@ -136,7 +136,7 @@
                     
                     if(e.pageX < self.prevMouseX){
 							var threshold = columnPos.x - half;
-							if(e.pageX  - parentOffset.x < threshold){
+							if(e.pageX < threshold){
 								//console.info('move left');
 								self._swapCol(self.startIndex-1);
 								self._eventHelper('change',e);
@@ -146,7 +146,7 @@
 						}else{
 							var threshold = columnPos.x + half;
 							//move to the right only if x is greater than threshold and the current col isn' the last one
-							if(e.pageX  - parentOffset.x > threshold && colCount != self.startIndex ){
+							if(e.pageX > threshold && colCount != self.startIndex ){
 								//console.info('move right');
 								self._swapCol(self.startIndex+1);
 								self._eventHelper('change',e);
