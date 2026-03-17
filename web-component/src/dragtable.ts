@@ -538,21 +538,26 @@ export class DragTable extends HTMLElement {
   private _setOrder(order: string[]): void {
     if (!this._table) return;
 
-    const headers = this._table.querySelectorAll('thead tr:first-child th');
-    if (order.length !== headers.length) return;
+    // Use the live header count for the length check
+    const initialCount = this._table.querySelectorAll('thead tr:first-child th').length;
+    if (order.length !== initialCount) return;
 
     for (let i = 0; i < order.length; i++) {
-      const targetHeader = Array.from(headers).find(
+      // Re-query the live DOM on every iteration. A static NodeList snapshot
+      // would return stale indices after the first swap, causing subsequent
+      // iterations to reference incorrect column positions.
+      const currentHeaders = Array.from(
+        this._table.querySelectorAll('thead tr:first-child th')
+      );
+
+      const startIdx = currentHeaders.findIndex(
         th => th.getAttribute(this._options.dataHeader) === order[i]
       );
-      
-      if (targetHeader) {
-        const startIdx = Array.from(headers).indexOf(targetHeader);
-        if (startIdx !== -1 && startIdx !== i) {
-          this._startIndex = startIdx;
-          this._currentColumnCollection = this._getCells(startIdx).array;
-          this._swapCol(i);
-        }
+
+      if (startIdx !== -1 && startIdx !== i) {
+        this._startIndex = startIdx;
+        this._currentColumnCollection = this._getCells(startIdx).array;
+        this._swapCol(i);
       }
     }
   }

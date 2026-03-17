@@ -19,7 +19,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "table",
@@ -37,7 +40,10 @@
     "url": "https://github.com/jebaird/dragtable.git"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.0",
+    "jsdom": "^26.0.0",
     "typescript": "^5.3.3",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vitest": "^4.1.0"
   }
 }
