@@ -527,4 +527,4 @@ The recommended approach is:
 4. ✅ Create demo page with usage examples
 5. ✅ Add comprehensive tests (Vitest, 47 tests)
 6. ✅ Document migration path (MIGRATION.md + updated README)
-7. ⬜ Release v4.0.0
+7. ✅ Release v4.0.0 (CHANGELOG, GitHub Actions CI/publish workflows, TypeScript declarations)
