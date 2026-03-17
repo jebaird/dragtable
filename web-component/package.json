@@ -1,0 +1,43 @@
+{
+  "name": "dragtable",
+  "version": "4.0.0",
+  "description": "Drag and drop table column reordering - Web Component",
+  "type": "module",
+  "main": "dist/dragtable.umd.js",
+  "module": "dist/dragtable.js",
+  "types": "dist/dragtable.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/dragtable.js",
+      "require": "./dist/dragtable.umd.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "table",
+    "drag",
+    "drop",
+    "column",
+    "reorder",
+    "web-component",
+    "custom-element"
+  ],
+  "author": "Jesse Baird <jebaird@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jebaird/dragtable.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vite": "^6.2.0"
+  }
+}

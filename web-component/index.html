@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DragTable Web Component Demo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    h2 {
+      color: #666;
+      margin-top: 40px;
+    }
+    
+    .demo-section {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #4CAF50;
+      color: white;
+      cursor: move;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .order-display {
+      margin-top: 10px;
+      padding: 10px;
+      background: #e8f5e9;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    
+    .event-log {
+      max-height: 200px;
+      overflow-y: auto;
+      background: #263238;
+      color: #aed581;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    
+    .event-log p {
+      margin: 5px 0;
+    }
+    
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    
+    button:hover {
+      background: #45a049;
+    }
+    
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+    
+    pre {
+      background: #263238;
+      color: #aed581;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 DragTable Web Component Demo</h1>
+  <p>Drag column headers to reorder columns. This is a native Web Component with no jQuery dependency!</p>
+
+  <!-- Basic Example -->
+  <div class="demo-section">
+    <h2>Basic Example</h2>
+    <p>Simply wrap your table with <code>&lt;drag-table&gt;</code>:</p>
+    
+    <drag-table id="demo1">
+      <table>
+        <thead>
+          <tr>
+            <th data-header="name">Name</th>
+            <th data-header="age">Age</th>
+            <th data-header="city">City</th>
+            <th data-header="country">Country</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>John Doe</td>
+            <td>32</td>
+            <td>New York</td>
+            <td>USA</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>28</td>
+            <td>London</td>
+            <td>UK</td>
+          </tr>
+          <tr>
+            <td>Bob Johnson</td>
+            <td>45</td>
+            <td>Sydney</td>
+            <td>Australia</td>
+          </tr>
+          <tr>
+            <td>Alice Brown</td>
+            <td>36</td>
+            <td>Toronto</td>
+            <td>Canada</td>
+          </tr>
+        </tbody>
+      </table>
+    </drag-table>
+    
+    <div class="order-display">
+      Current order: <span id="order1"></span>
+    </div>
+    
+    <button onclick="getOrder('demo1', 'order1')">Get Order</button>
+    <button onclick="setOrder('demo1', ['city', 'name', 'country', 'age'])">Set Order: City, Name, Country, Age</button>
+  </div>
+
+  <!-- Event Handling Example -->
+  <div class="demo-section">
+    <h2>Event Handling</h2>
+    <p>Listen to drag events: <code>dragtable-start</code>, <code>dragtable-change</code>, <code>dragtable-stop</code></p>
+    
+    <drag-table id="demo2">
+      <table>
+        <thead>
+          <tr>
+            <th data-header="product">Product</th>
+            <th data-header="price">Price</th>
+            <th data-header="quantity">Quantity</th>
+            <th data-header="total">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Widget A</td>
+            <td>$10.00</td>
+            <td>5</td>
+            <td>$50.00</td>
+          </tr>
+          <tr>
+            <td>Widget B</td>
+            <td>$15.00</td>
+            <td>3</td>
+            <td>$45.00</td>
+          </tr>
+          <tr>
+            <td>Widget C</td>
+            <td>$8.00</td>
+            <td>10</td>
+            <td>$80.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </drag-table>
+    
+    <h3>Event Log:</h3>
+    <div class="event-log" id="eventLog"></div>
+    <button onclick="clearLog()">Clear Log</button>
+  </div>
+
+  <!-- Usage Code Example -->
+  <div class="demo-section">
+    <h2>Usage</h2>
+    
+    <h3>HTML</h3>
+    <pre>&lt;script type="module" src="dragtable.js"&gt;&lt;/script&gt;
+
+&lt;drag-table&gt;
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th data-header="name"&gt;Name&lt;/th&gt;
+        &lt;th data-header="age"&gt;Age&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;John&lt;/td&gt;&lt;td&gt;32&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/drag-table&gt;</pre>
+
+    <h3>JavaScript API</h3>
+    <pre>const dragTable = document.querySelector('drag-table');
+
+// Get current column order
+const order = dragTable.order();
+console.log(order); // ['name', 'age']
+
+// Set column order
+dragTable.order(['age', 'name']);
+
+// Listen to events
+dragTable.addEventListener('dragtable-change', (e) => {
+  console.log('Column moved:', e.detail);
+});</pre>
+
+    <h3>Available Events</h3>
+    <pre>dragtable-start      // When drag begins
+dragtable-beforechange // Before column swap (cancelable)
+dragtable-change     // After column swap
+dragtable-stop       // When drag ends</pre>
+  </div>
+
+  <!-- Load the Web Component -->
+  <script type="module" src="./src/dragtable.ts"></script>
+  
+  <script>
+    // Helper functions for demo
+    function getOrder(tableId, displayId) {
+      const dragTable = document.getElementById(tableId);
+      const order = dragTable.order();
+      document.getElementById(displayId).textContent = JSON.stringify(order);
+    }
+    
+    function setOrder(tableId, newOrder) {
+      const dragTable = document.getElementById(tableId);
+      dragTable.order(newOrder);
+      getOrder(tableId, 'order1');
+    }
+    
+    function logEvent(eventName, detail) {
+      const log = document.getElementById('eventLog');
+      const time = new Date().toLocaleTimeString();
+      log.innerHTML += `<p>[${time}] <strong>${eventName}</strong>: order = ${JSON.stringify(detail.order)}</p>`;
+      log.scrollTop = log.scrollHeight;
+    }
+    
+    function clearLog() {
+      document.getElementById('eventLog').innerHTML = '';
+    }
+    
+    // Set up event listeners for demo2
+    document.addEventListener('DOMContentLoaded', () => {
+      const demo2 = document.getElementById('demo2');
+      
+      demo2.addEventListener('dragtable-start', (e) => {
+        logEvent('dragtable-start', e.detail);
+      });
+      
+      demo2.addEventListener('dragtable-change', (e) => {
+        logEvent('dragtable-change', e.detail);
+      });
+      
+      demo2.addEventListener('dragtable-stop', (e) => {
+        logEvent('dragtable-stop', e.detail);
+      });
+      
+      // Initialize order display
+      setTimeout(() => getOrder('demo1', 'order1'), 100);
+    });
+  </script>
+</body>
+</html>
