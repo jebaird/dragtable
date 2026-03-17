@@ -526,5 +526,5 @@ The recommended approach is:
 3. ✅ Implement core functionality (`<drag-table>` custom element)
 4. ✅ Create demo page with usage examples
 5. ✅ Add comprehensive tests (Vitest, 47 tests)
-6. ⬜ Document migration path
+6. ✅ Document migration path (MIGRATION.md + updated README)
 7. ⬜ Release v4.0.0
