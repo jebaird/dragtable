@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+web-component/dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Temp files
+*.tmp
+.tmp/

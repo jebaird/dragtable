@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: web-component/package-lock.json
+
+      - name: Install dependencies
+        working-directory: web-component
+        run: npm ci
+
+      - name: Type-check
+        working-directory: web-component
+        run: npm run typecheck
+
+      - name: Run tests
+        working-directory: web-component
+        run: npm test
+
+      - name: Build
+        working-directory: web-component
+        run: npm run build
+
+      - name: Verify dist contains expected files
+        working-directory: web-component
+        run: |
+          test -f dist/dragtable.js      || (echo "Missing dist/dragtable.js" && exit 1)
+          test -f dist/dragtable.umd.js  || (echo "Missing dist/dragtable.umd.js" && exit 1)
+          test -f dist/dragtable.d.ts    || (echo "Missing dist/dragtable.d.ts" && exit 1)
+          echo "✓ All expected dist files present"
